@@ -1,0 +1,41 @@
+---
+dante_container_name: dante
+dante_image: kr3ssh/dante
+dante_version: latest
+dante_config_dir: /opt/docker/services/dante
+dante_published_ports: []
+dante_links: []
+dante_networks: []
+
+dante_logoutput: stdout
+dante_external: eth0
+
+dante_clientmethod: none
+dante_socksmethod: username
+
+dante_user_privileged: root
+dante_user_notprivileged: nobody
+
+dante_auth_username: ''
+dante_auth_password: ''
+
+dante_rules:
+  - |
+      client pass {
+             from: 0.0.0.0/0 to: 0.0.0.0/0
+             log: error
+      }
+  - |
+      socks pass {
+             from: 0.0.0.0/0 to: 0.0.0.0/0
+             command: bind connect udpassociate
+             protocol: tcp udp
+             log: error
+             socksmethod: username
+      }
+  - |
+      socks pass {
+             from: 0.0.0.0/0 to: 0.0.0.0/0
+             command: bindreply udpreply
+             log: error
+      }

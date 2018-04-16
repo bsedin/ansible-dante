@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+
+logoutput: {{ dante_logoutput }}
+internal: 0.0.0.0 port = 1080
+external: {{ dante_external }}
+clientmethod: {{ dante_clientmethod }}
+socksmethod: {{ dante_socksmethod }}
+user.privileged: root
+user.unprivileged: nobody
+
+{% for rule in dante_rules %}
+{{ rule }}
+{% endfor %}

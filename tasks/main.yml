@@ -1,0 +1,29 @@
+---
+- name: ensure dante config dir
+  file:
+    dest: '{{ dante_config_dir }}'
+    state: directory
+
+- name: create dante config file
+  template:
+    src: sockd.conf.j2
+    dest: '{{ dante_config_dir }}/sockd.conf'
+  notify:
+    - reload dante
+
+- name: run dante container
+  docker_container:
+    state: started
+    restart: yes
+    recreate: yes
+    name: '{{ dante_container_name }}'
+    image: '{{ dante_image }}:{{ dante_version }}'
+    restart_policy: always
+    published_ports: '{{ dante_published_ports | default([]) }}'
+    links: '{{ dante_links }}'
+    networks: '{{ dante_networks }}'
+    volumes:
+      - '{{ dante_config_dir }}/sockd.conf:/etc/sockd.conf'
+    env:
+      DANTE_USER: '{{ dante_auth_user }}'
+      DANTE_PASSWORD: '{{ dante_auth_password }}'

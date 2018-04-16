@@ -1,0 +1,5 @@
+- name: reload dante
+  shell: docker kill --signal=HUP {{ dante_container_name }}
+
+- name: restart dante
+  shell: docker restart {{ dante_container_name }}
